@@ -7,7 +7,7 @@ class Transaction < ApplicationRecord
     end
 
     def show_items
-        puts self.items
+        self.items.each { |i| puts Item.find_by(id: i).name}
     end
     
 end
