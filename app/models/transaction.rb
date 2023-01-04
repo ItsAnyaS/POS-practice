@@ -1,12 +1,13 @@
 class Transaction < ApplicationRecord
 
-    def add_item(id, item)
-        transaction = Transaction.find_by(id: id)
-        transaction.items.push(item)
-        transaction.save
+    def add_item(item)
+        # transaction = Transaction.find_by(id: id)
+        self.items << item
+        self.save
     end
 
-    def show_items(id)
-
+    def show_items
+        puts self.items
     end
+    
 end
