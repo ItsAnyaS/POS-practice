@@ -39,6 +39,9 @@ class Transaction < ApplicationRecord
        self.items.map { |i|  Item.find_by(id: i)}
     end
     
-
+    def add_tip(tip_amount)
+        self.tip += tip_amount
+        self.save
+    end
 
 end
