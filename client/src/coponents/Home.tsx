@@ -4,11 +4,11 @@ import '../styles/Home.css'
 import ItemPage from './ItemPage';
 
 interface CategoryObj  {
-name: string,
-description: string,
-created_at: string,
-updated_at: string,
-id: number
+    name: string,
+    description: string,
+    created_at: string,
+    updated_at: string,
+    id: number
 }
 
 interface ItemObj {
@@ -24,8 +24,9 @@ interface ItemObj {
 const Home: React.FC = () => {
 
 const [categories, setCategories] = useState<CategoryObj[]>([])
-// const [categoryId, setCategoryId] = useState<number>()
+const [categoryIsActive, setCategoryIsActive] = useState<boolean>(true)
 const [items, setItems] = useState<ItemObj[]>([])
+const [cart, setCart] = useState<ItemObj[]>([])
 
 const getCategories = async() => {
     let req = await fetch('/categories')
@@ -40,20 +41,26 @@ const getItemsByCategories = async (categoryId: number) => {
     let res = await req.json()
     console.log(res)
     setItems(res)
+    setCategoryIsActive(false)
 }
+
+
 
 useEffect( () => {
     getCategories()
 }, [])
 
+console.log(cart)
+
 return (
     <main>
+        <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>
         <div>
-            <div id="category_container">
-                {categories.map( category => <button className="category_btn" onClick={()=> {;getItemsByCategories(category.id)}} key={category?.id}>{category?.name}</button>)}
-            </div>
+           { categoryIsActive && <div id="category_container">
+                {categories.map( category => <button className="category_btn" onClick={()=> {getItemsByCategories(category.id)}} key={category?.id}>{category?.name}</button>)}
+            </div>}
         </div>
-        <ItemPage items={items} />
+       { !categoryIsActive && <ItemPage items={items} setCart={setCart} />}
     </main>
 )
 }
