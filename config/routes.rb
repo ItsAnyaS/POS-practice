@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   get '/categories', to: 'categories#index'
 
 # get items by category
-  # get '/items_by_category', to: 'items#items_by_category'
+  get '/items_by_category/:categoryId', to: 'items#items_by_category'
 
 end
