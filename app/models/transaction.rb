@@ -4,16 +4,15 @@ class Transaction < ApplicationRecord
 
 
     def add_item(item_id)
-        # transaction = Transaction.find_by(id: id)
         period = Period.find_by(id: self.period_id)
         user = User.find_by(id: period.user_id)
         if item = Item.find_by(id: item_id)
-        self.items << item_id
-        self.number_of_items += 1
-        tax_of_item = (item.price.to_i * user.tax_rate)/100
-        self.tax += tax_of_item
-        self.total += item.price.to_i + tax_of_item
-        self.save
+            self.items << item_id
+            self.number_of_items += 1
+            tax_of_item = (item.price.to_i * user.tax_rate)/100
+            self.tax += tax_of_item
+            self.total += item.price.to_i + tax_of_item
+            self.save
         end
     end
 
@@ -31,8 +30,6 @@ class Transaction < ApplicationRecord
             self.save
         end
     end
-
-
 
 
     def show_items
