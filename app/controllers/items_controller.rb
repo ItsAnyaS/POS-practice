@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
 
     def create
         if !Item.find_by(name: params[:name].downcase)
-            category = Category.find_by(name: params[:category_name])
+            category = Category.find_by(id: params[:category_id].to_i)
             item = Item.create(name: params[:name], price: params[:price], category_id: category.id)
             render json: item
         else 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import React from "react"
 import '../styles/Home.css'
 import ItemPage from './ItemPage';
@@ -20,6 +20,12 @@ interface ItemObj {
     updated_at: string
 }
 
+interface NewItem {
+    name?: string,
+    price?: number,
+    category?: number
+}
+
 
 const Home: React.FC = () => {
 
@@ -27,6 +33,9 @@ const [categories, setCategories] = useState<CategoryObj[]>([])
 const [categoryIsActive, setCategoryIsActive] = useState<boolean>(true)
 const [items, setItems] = useState<ItemObj[]>([])
 const [cart, setCart] = useState<ItemObj[]>([])
+const [currentCategory, setCurrentCategory] = useState<number>()
+const [newItem, setNewItem] = useState<NewItem>({name: '', price: 0, category: 0})
+const [displayAddItemMenu, setDisplayAddItemMenu] = useState<boolean>(false)
 
 const getCategories = async() => {
     let req = await fetch('/categories')
@@ -36,7 +45,8 @@ const getCategories = async() => {
 }
 
 const getItemsByCategories = async (categoryId: number) => {
-    console.log(categoryId)
+    setCurrentCategory(categoryId)
+    setNewItem({...newItem, category: categoryId})
     let req = await fetch(`/items_by_category/${categoryId}`)
     let res = await req.json()
     console.log(res)
@@ -44,14 +54,38 @@ const getItemsByCategories = async (categoryId: number) => {
     setCategoryIsActive(false)
 }
 
+const createItem = async(e:React.SyntheticEvent) => {
+    e.preventDefault()
+    let req = await fetch('/items', {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({
+            name: newItem.name,
+            price: newItem.price,
+            category_id: newItem.category   
+        })
+    })
+    let res = await req.json()
+    console.log(res)
+    setNewItem({name: '', price: 0, category: 0})
+    setDisplayAddItemMenu(false)
+}
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+setNewItem({
+    ...newItem,
+    [e.target.name]: e.target.value.toLowerCase()
+})
+
+}
 
 
 useEffect( () => {
     getCategories()
 }, [])
 
-console.log(cart)
-
+// console.log(cart)
+// console.log(currentCategory)
+console.log(newItem)
 return (
     <main>
         <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>
@@ -61,7 +95,12 @@ return (
             </div>}
         </div>
        { !categoryIsActive && <ItemPage items={items} setCart={setCart} />}
-                {!categoryIsActive && <button>Add Item</button>}
+        {!categoryIsActive && <button onClick={()=> {setDisplayAddItemMenu(true)}}>Add Item</button>}
+       {displayAddItemMenu &&  <form onSubmit={createItem}>
+            <input placeholder="name" onChange={(e) => {handleChange(e)}} name='name'/>
+            <input placeholder="price" name="price" onChange={(e) => {handleChange(e)}}/>
+            <button>Add</button>
+        </form>}
     </main>
 )
 }
