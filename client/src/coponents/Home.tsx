@@ -70,12 +70,28 @@ const createItem = async(e:React.SyntheticEvent) => {
     setNewItem({name: '', price: 0, category: 0})
     setDisplayAddItemMenu(false)
 }
+
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 setNewItem({
     ...newItem,
     [e.target.name]: e.target.value.toLowerCase()
 })
+}
 
+const chechout = async() => {
+    
+    let req = await fetch('/transactions', {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({
+            cart: cart,
+            tip: prompt("How much do you want to tip?"),
+            period_id: 1
+            //!Change ^^ this when doing auth
+        })
+    })
+    let res = await req.json()
+    console.log(res)
 }
 
 
@@ -83,9 +99,7 @@ useEffect( () => {
     getCategories()
 }, [])
 
-// console.log(cart)
-// console.log(currentCategory)
-console.log(newItem)
+console.log(cart)
 return (
     <main>
         <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>
@@ -101,6 +115,7 @@ return (
             <input placeholder="price" name="price" onChange={(e) => {handleChange(e)}}/>
             <button>Add</button>
         </form>}
+        <button onClick={() =>{chechout()}}>Checkout</button>
     </main>
 )
 }

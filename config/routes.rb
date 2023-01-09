@@ -12,4 +12,6 @@ Rails.application.routes.draw do
 
   post '/items', to: 'items#create'
 
+  post '/transactions', to: 'transactions#create'
+
 end
