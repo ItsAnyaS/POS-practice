@@ -8,4 +8,8 @@ Rails.application.routes.draw do
 # get items by category
   get '/items_by_category/:categoryId', to: 'items#items_by_category'
 
+  post '/categories', to: 'categories#create'
+
+  post '/items', to: 'items#create'
+
 end

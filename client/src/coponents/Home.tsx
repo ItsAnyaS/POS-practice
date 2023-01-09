@@ -61,6 +61,7 @@ return (
             </div>}
         </div>
        { !categoryIsActive && <ItemPage items={items} setCart={setCart} />}
+                {!categoryIsActive && <button>Add Item</button>}
     </main>
 )
 }
