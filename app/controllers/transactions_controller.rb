@@ -17,6 +17,7 @@ class TransactionsController < ApplicationController
             total += item["price"].to_i + tax
             Item.find_by(name: item["name"]).id
         end
+        total += params[:tip].to_i
         transaction = Transaction.create(number_of_items: number_of_items, items: items, total: total, tax: total_tax, tip: params[:tip], period_id: params[:period_id])
         render json: transaction
     end

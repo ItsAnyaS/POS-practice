@@ -40,7 +40,6 @@ const [displayAddItemMenu, setDisplayAddItemMenu] = useState<boolean>(false)
 const getCategories = async() => {
     let req = await fetch('/categories')
     let res = await req.json()
-    console.log(res)
     setCategories(res)
 }
 
@@ -49,7 +48,6 @@ const getItemsByCategories = async (categoryId: number) => {
     setNewItem({...newItem, category: categoryId})
     let req = await fetch(`/items_by_category/${categoryId}`)
     let res = await req.json()
-    console.log(res)
     setItems(res)
     setCategoryIsActive(false)
 }
@@ -79,19 +77,23 @@ setNewItem({
 }
 
 const chechout = async() => {
-    
+    let tip = prompt("How much do you want to tip?")
+    if (tip){ 
     let req = await fetch('/transactions', {
         method: "POST",
         headers: {"Content-type": "application/json"},
         body: JSON.stringify({
             cart: cart,
-            tip: prompt("How much do you want to tip?"),
+            tip: tip,
             period_id: 1
             //!Change ^^ this when doing auth
         })
     })
     let res = await req.json()
     console.log(res)
+    setNewItem({name: '', price: 0, category: 0})
+    setCart([])
+}
 }
 
 
@@ -99,7 +101,6 @@ useEffect( () => {
     getCategories()
 }, [])
 
-console.log(cart)
 return (
     <main>
         <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>
