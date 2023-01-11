@@ -3,6 +3,7 @@ import React from "react"
 import '../styles/Home.css'
 import ItemPage from './ItemPage';
 
+
 interface CategoryObj  {
     name: string,
     description: string,
@@ -102,8 +103,9 @@ useEffect( () => {
 }, [])
 
 return (
-    <main>
-        <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>
+    <main id="main-wrapper">
+        <div className="items-container">
+       { !categoryIsActive && <button onClick={()=> {setCategoryIsActive(true)}}>Back</button>}
         <div>
            { categoryIsActive && <div id="category_container">
                 {categories.map( category => <button className="category_btn" onClick={()=> {getItemsByCategories(category.id)}} key={category?.id}>{category?.name}</button>)}
@@ -116,7 +118,10 @@ return (
             <input placeholder="price" name="price" onChange={(e) => {handleChange(e)}}/>
             <button>Add</button>
         </form>}
+        </div>
+        <div className="cart-container">
         <button onClick={() =>{chechout()}}>Checkout</button>
+        </div>
     </main>
 )
 }

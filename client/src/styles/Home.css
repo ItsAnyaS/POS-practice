@@ -1,4 +1,23 @@
+#main-wrapper {
+border: 1px solid black;
+display: flex;
+}
 
 .category_btn {
 font-size: 2em;
+}
+
+.items-container {
+border: 1px solid red;
+width: 75%;
+}
+
+.cart-container {
+border: 1px solid green;
+width: 25%;
+position: fixed;
+right: 0;
+height: 91%;
+margin: 0;
+padding: 0;
 }
